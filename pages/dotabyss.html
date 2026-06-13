@@ -642,7 +642,7 @@
     .dat-meta { min-height: 24px; margin: 0 8px 6px 20px; padding: 4px 8px 5px 18px; font-size: 11px; justify-content: center; }
     .dat-meta::before { left: -16px; width: 28px; height: 28px; border-width: 2px; }
     .dat-meta::after { right: -8px; }
-    .dat-meta span { width: 100%; color: transparent; text-align: center; overflow: visible; }
+    .dat-meta span { width: auto; min-width: 12px; color: inherit; font-size: 0; line-height: 1; text-align: center; overflow: visible; }
     .dat-meta span::after { content: attr(data-short); font-size: 12px; font-weight: 900; line-height: 1; }
     .dat-position-front .dat-meta span::after,
     .dat-position-back .dat-meta span::after { color: #fff; }
