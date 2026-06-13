@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ドットアビス Tier表（エアプ版）</title>
+<meta name="description" content="ドットアビスのキャラクターTier表。属性、ポジション、武器、マナタイプ、勢力、スキル種別で検索・比較できます。">
+<style>
+.dotabyss-tier {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    color: #f4f2ff;
+    font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 700;
+}
+.dotabyss-tier *,
+.dotabyss-tier *::before,
+.dotabyss-tier *::after { box-sizing: border-box; }
+.dat-page-title {
+    margin: 0 0 10px;
+    color: inherit;
+}
+.dotabyss-tier a { color: inherit; }
+.dat-intro {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border-left: 4px solid #6f65a0;
+    background: #f5f2ff;
+    color: #3f365d;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.65;
+}
+.dat-panel {
+    margin: 0 0 16px;
+    padding: 12px;
+    border: 1px solid #554c83;
+    background: #181522;
+    font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 800;
+}
+.dat-search {
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 10px 12px;
+    border: 1px solid #6f65a0;
+    background: #100f18;
+    color: #fff;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 800;
+}
+.dat-filter-block {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+    margin: 8px 0;
+}
+.dat-filter-block[data-filter-block="mana_type"],
+.dat-filter-block[data-filter-block="union_group"] {
+    display: inline-grid;
+    width: min(100%, 360px);
+    margin-right: 14px;
+    vertical-align: top;
+}
+.dat-filter-block[data-filter-block="union_group"] {
+    width: min(100%, 300px);
+}
+.dat-filter-label {
+    color: #c9c0f4;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 30px;
+}
+.dat-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.dat-filter-btn {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 9px;
+    border: 1px solid #6e628d;
+    background: #252033;
+    color: #f4efff;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 800;
+    line-height: 1.2;
+}
+.dat-filter-btn.is-active {
+    border-color: #e9cb62;
+    background: #493860;
+    color: #fff;
+}
+.dat-filter-btn[data-filter="mana_type"][data-value="2"],
+.dat-mark-zeal {
+    color: #f84d4c !important;
+}
+.dat-filter-btn[data-filter="mana_type"][data-value="3"],
+.dat-mark-impact {
+    color: #4a5fa9 !important;
+}
+.dat-filter-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+.dat-tier-section {
+    margin: 0 0 22px;
+    border: 1px solid #514771;
+    background: #111018;
+}
+.dat-tier-title {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: 0;
+    padding: 8px 12px;
+    border-bottom: 1px solid #665b88;
+    background: #3b3367;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+.dat-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 3fr) minmax(0, 2fr);
+    gap: 10px;
+    padding: 0 10px 10px;
+    margin: 0;
+}
+.dat-position {
+    min-width: 0;
+}
+.dat-stage.is-position-filtered {
+    grid-template-columns: minmax(0, 1fr);
+}
+.dat-stage.is-position-filtered .dat-position:not(.is-filter-target) {
+    display: none;
+}
+.dat-stage.is-position-filtered .dat-position.is-filter-target .dat-card-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+.dat-stage:not(.is-position-filtered) .dat-position[hidden] {
+    display: block !important;
+    visibility: hidden;
+}
+.dat-position-title {
+    position: relative;
+    margin: 0 0 8px 0;
+    padding: 7px 22px 7px 8px;
+    background: #28233a;
+    color: #191622;
+    font-size: 15px;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,.35);
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+}
+.dat-position-front .dat-position-title { background: #f54f7e; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.35); }
+.dat-position-back .dat-position-title { background: #77a0fa; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.35); }
+.dat-position-assist .dat-position-title { background: #fcdc00; color: #3b2b00; }
+.dat-card-grid {
+    display: grid;
+    gap: 12px 8px;
+}
+.dat-position-front .dat-card-grid,
+.dat-position-back .dat-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dat-position-assist .dat-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dat-card {
+    min-width: 0;
+    border: 1px solid #453d5c;
+    background: #1d1a28;
+    color: #fff;
+    cursor: pointer;
+    overflow: visible;
+    box-shadow: 0 5px 0 rgba(0,0,0,.35);
+    transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+}
+.dat-card:hover,
+.dat-card:focus-visible {
+    transform: translateY(-2px) scale(1.04);
+    z-index: 8;
+    filter: brightness(1.08);
+    box-shadow: 0 8px 0 rgba(0,0,0,.35), 0 0 14px rgba(255,255,255,.18);
+}
+.dat-card[hidden],
+.dat-tier-section[hidden],
+.dat-position[hidden] { display: none !important; }
+.dat-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #0b0b10;
+    border: 3px solid #8d879d;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    transition: transform .15s ease, box-shadow .15s ease;
+    transform-origin: center;
+}
+.dat-card:hover .dat-thumb,
+.dat-card:focus-visible .dat-thumb {
+    transform: scale(1.03);
+}
+.dat-rarity-ssr .dat-thumb { border-color: #f3b94b; box-shadow: 0 0 0 1px #ffe7a0, inset 0 0 0 1px rgba(255,255,255,.25); }
+.dat-rarity-sr .dat-thumb { border-color: #b370ff; box-shadow: 0 0 0 1px #e2c2ff, inset 0 0 0 1px rgba(255,255,255,.25); }
+.dat-rarity-r .dat-thumb { border-color: #cbd2dc; box-shadow: 0 0 0 1px #f5f8ff, inset 0 0 0 1px rgba(255,255,255,.25); }
+.dat-thumb img.dat-main-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.dat-badge {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 2px 5px;
+    background: rgba(14, 12, 23, .88);
+    border: 1px solid rgba(255,255,255,.35);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+.dat-rarity {
+    --rarity-gradient: linear-gradient(180deg, #fff 0%, #ddd 52%, #fff 100%);
+    --rarity-outline: rgba(0,0,0,.85);
+    --rarity-glow: rgba(255,255,255,.55);
+    top: -11px;
+    left: -8px;
+    width: auto;
+    height: auto;
+    z-index: 5;
+    border: 0;
+    background: transparent !important;
+    padding: 0;
+    overflow: visible;
+    pointer-events: none;
+    font-family: "Arial Black", "Impact", "M PLUS Rounded 1c", sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: .82;
+    letter-spacing: 0;
+    transform: scaleX(.9) scaleY(1.16);
+    transform-origin: left top;
+    filter: none;
+}
+.dat-rarity-svg {
+    display: none !important;
+}
+.dat-rarity-label {
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    background-image: var(--rarity-gradient) !important;
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    text-shadow: none !important;
+    filter: drop-shadow(1px 1px 0 var(--rarity-outline)) drop-shadow(0 0 4px var(--rarity-glow));
+}
+.dat-rarity-label::before {
+    content: none;
+    display: none;
+}
+.dat-rarity-ssr .dat-rarity {
+    --rarity-gradient: linear-gradient(180deg, #fffdf2 0%, #fff08d 28%, #ffb21f 58%, #fff4ae 100%);
+    --rarity-outline: #6a3a00;
+    --rarity-glow: rgba(255,224,82,.95);
+    color: #ffd95a;
+}
+.dat-rarity-sr .dat-rarity {
+    --rarity-gradient: linear-gradient(180deg, #fff4ff 0%, #f1b0ff 30%, #bb72ff 58%, #f8dcff 100%);
+    --rarity-outline: #4b146a;
+    --rarity-glow: rgba(226,151,255,.95);
+    color: #dc8cff;
+}
+.dat-rarity-r .dat-rarity {
+    --rarity-gradient: linear-gradient(180deg, #ffffff 0%, #f4f8ff 30%, #cbd5e4 58%, #ffffff 100%);
+    --rarity-outline: #4b5360;
+    --rarity-glow: rgba(238,245,255,.9);
+    color: #eef4ff;
+}
+.dat-mana {
+    top: 23px;
+    left: -7px;
+    right: auto;
+    z-index: 6;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+.dat-element {
+    top: -8px;
+    right: -8px;
+    bottom: auto;
+    left: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 1px;
+    border: 2px solid #111;
+    border-radius: 50%;
+    background: #111;
+    z-index: 8;
+}
+.dat-rarity-ssr .dat-element { box-shadow: 0 0 0 2px #f3b94b; }
+.dat-rarity-sr .dat-element { box-shadow: 0 0 0 2px #b370ff; }
+.dat-rarity-r .dat-element { box-shadow: 0 0 0 2px #cbd2dc; }
+.dat-badge img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+.dat-mana img {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.55)) drop-shadow(0 0 2px rgba(0,0,0,.45));
+}
+.dat-element img {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+.dat-name {
+    min-height: 36px;
+    padding: 7px 4px 3px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.25;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+.dat-meta {
+    --pos-color: #666;
+    position: relative;
+    display: flex;
+    min-height: 25px;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 4px 7px 22px;
+    padding: 4px 10px 5px 24px;
+    background: transparent !important;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+}
+.dat-meta::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 50%;
+    width: 31px;
+    height: 31px;
+    background: #15131f;
+    border: 2px solid currentColor;
+    transform: translateY(-50%) rotate(45deg);
+    z-index: 1;
+}
+.dat-meta::after {
+    content: "";
+    position: absolute;
+    inset: 0 -12px 0 0;
+    width: auto;
+    height: auto;
+    background: var(--pos-color);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+    z-index: 0;
+}
+.dat-meta > * {
+    position: relative;
+    z-index: 2;
+}
+.dat-meta span {
+    display: block;
+    min-width: 0;
+    white-space: nowrap;
+    line-height: 1.05;
+    overflow: hidden;
+    text-overflow: clip;
+}
+.dat-position-front .dat-meta { --pos-color: #f54f7e; color: #fff; }
+.dat-position-back .dat-meta { --pos-color: #77a0fa; color: #fff; }
+.dat-position-assist .dat-meta { --pos-color: #fcdc00; color: #3b2b00; }
+.dat-meta img {
+    position: absolute;
+    left: -15px;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    margin: auto 0;
+    filter: drop-shadow(0 2px 1px rgba(0,0,0,.65));
+    object-fit: contain;
+}
+.dat-empty { display: none; }
+.dat-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(0,0,0,.78);
+    font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 800;
+}
+.dat-modal.is-open { display: flex; }
+.dat-dialog {
+    width: min(900px, 100%);
+    max-height: 88vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 2px solid #6e8fb5;
+    background: #15131f;
+    color: #f7f3ff;
+    position: relative;
+}
+.dat-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: #61efe7;
+    color: #1e1740;
+    cursor: pointer;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 44px;
+}
+.dat-detail {
+    padding: 18px 34px 18px 16px;
+    overflow-x: hidden;
+}
+.dat-detail-head {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.dat-detail-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid #5d5379;
+}
+.dat-detail-name {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 24px;
+    line-height: 1.25;
+}
+.dat-detail-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.dat-detail-rarity {
+    position: static;
+    flex: 0 0 96px;
+    width: 96px;
+    height: 54px;
+}
+.dat-detail-rarity .dat-rarity-svg {
+    width: 96px;
+    height: 54px;
+}
+.dat-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.dat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border: 1px solid #5d5379;
+    background: #242033;
+    color: #eee8ff;
+    font-size: 12px;
+    line-height: 1.2;
+}
+.dat-chip img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+.dat-box {
+    margin: 12px 0;
+    border: 2px solid #5b2a76;
+    background: #211f2e;
+}
+.dat-box-title {
+    padding: 7px 9px;
+    background: #a55bc7;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+}
+.dat-box-body {
+    padding: 0;
+    color: #e7e1f8;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.55;
+}
+.dat-skill-card,
+.dat-ability-card {
+    border-top: 1px solid rgba(174,91,201,.55);
+}
+.dat-ability-card + .dat-ability-card {
+    margin-top: 16px;
+    border-top: 2px solid #1f7f7b;
+}
+.dat-skill-head,
+.dat-ability-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 12px;
+    background: #5b2b72;
+}
+.dat-ability-box {
+    border-color: #1f7f7b;
+}
+.dat-ability-box .dat-box-title {
+    background: #1f817d;
+}
+.dat-ability-box .dat-ability-head {
+    background: #212331;
+    border-bottom: 2px solid #236a70;
+}
+.dat-skill-name,
+.dat-ability-name {
+    min-width: 0;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.25;
+}
+.dat-skill-meta {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    color: #d8d1ff;
+}
+.dat-skill-meta img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+.dat-charge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #171521;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+}
+.dat-skill-text,
+.dat-ability-text {
+    padding: 12px 20px;
+    background: #2a2938;
+}
+.dat-force-label {
+    display: block;
+    margin: 10px 0 4px;
+    color: #aaa8df;
+}
+.dat-stat-main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.dat-stat-main div,
+.dat-stat-grid div {
+    padding: 7px;
+    border: 1px solid #4b4266;
+    background: #211c30;
+}
+.dat-stat-main b,
+.dat-stat-grid b {
+    display: block;
+    margin-bottom: 3px;
+    color: #bfb5ed;
+    font-size: 11px;
+}
+.dat-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    font-size: 12px;
+}
+@media (max-width: 700px) {
+    .dat-page-title { margin-bottom: 8px; }
+    .dat-filter-block { grid-template-columns: 1fr; gap: 4px; }
+    .dat-filter-block[data-filter-block="mana_type"],
+    .dat-filter-block[data-filter-block="union_group"] { display: grid; width: 100%; margin-right: 0; }
+    .dat-filter-label { line-height: 1.2; }
+    .dat-stage { grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr); gap: 5px; padding: 0 5px 5px; }
+    .dat-stage.is-position-filtered .dat-position.is-filter-target .dat-card-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .dat-position-front .dat-card-grid,
+    .dat-position-back .dat-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dat-position-assist .dat-card-grid { grid-template-columns: minmax(0, 1fr); }
+    .dat-card-grid { gap: 9px 5px; }
+    .dat-position-title { margin-right: 0; padding: 5px 16px 5px 2px; font-size: 12px; }
+    .dat-name { min-height: 34px; font-size: 11px; }
+    .dat-meta { min-height: 25px; margin: 0 9px 6px 22px; padding: 4px 5px 5px 13px; font-size: 9px; }
+    .dat-meta::before { left: -19px; width: 30px; height: 30px; border-width: 2px; }
+    .dat-meta::after { right: -8px; }
+    .dat-meta img { left: -15px; width: 23px; height: 23px; margin: auto 0; }
+    .dat-rarity { top: -8px; left: -5px; width: auto; height: auto; font-size: 18px; }
+    .dat-rarity-svg { display: none !important; }
+    .dat-detail-rarity { flex-basis: 66px; width: 66px; height: 38px; }
+    .dat-detail-rarity .dat-rarity-svg { width: 66px; height: 38px; }
+    .dat-mana { top: 15px; left: -5px; right: auto; }
+    .dat-mana img { width: 31px; height: 31px; }
+    .dat-element { top: -6px; right: -6px; left: auto; padding: 1px; border-width: 2px; }
+    .dat-element img { width: 20px; height: 20px; }
+    .dat-detail-head { grid-template-columns: 82px minmax(0, 1fr); gap: 10px; }
+    .dat-detail-img { width: 82px; height: 82px; }
+    .dat-detail-name { font-size: 19px; }
+    .dat-box-body { font-size: 14px; }
+    .dat-skill-name, .dat-ability-name { font-size: 16px; }
+    .dat-skill-head, .dat-ability-head { align-items: flex-start; flex-direction: column; }
+    .dat-stat-grid { grid-template-columns: 1fr; }
+}
+.dotabyss-tier {
+    padding: 0 8px 20px;
+}
+.dotabyss-tier .dat-page-title {
+    color: #2b2550;
+    text-shadow: none;
+    font-weight: 900;
+}
+.dat-loading,
+.dat-error {
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid #554c83;
+    background: #181522;
+    color: #f4f2ff;
+    font-weight: 800;
+}
+.dat-error {
+    color: #ffb5b5;
+}
+</style>
+</head>
+<body>
+<div class="dotabyss-tier" itemscope itemtype="https://schema.org/CollectionPage">
+    <h2 class="dat-page-title" itemprop="name">ドットアビス Tier表（エアプ版）</h2>
+    <p class="dat-intro" id="dat-intro">ドットアビスのキャラクターTier表です。属性、ポジション、武器、マナタイプ、勢力、スキル種別で絞り込みできます。</p>
+
+    <div class="dat-panel" role="search">
+        <input class="dat-search" id="dat-search" type="search" placeholder="キャラ名・スキル・アビリティで検索" aria-label="Tier表を検索">
+        <div id="dat-filter-list"></div>
+    </div>
+
+    <div id="dat-status" class="dat-loading">Tierデータを読み込み中...</div>
+    <div id="dat-tier-list"></div>
+
+    <div class="dat-modal" id="dat-modal" aria-hidden="true">
+        <div class="dat-dialog" role="dialog" aria-modal="true" aria-labelledby="dat-modal-title">
+            <button type="button" class="dat-modal-close" id="dat-modal-close" aria-label="閉じる">&times;</button>
+            <div class="dat-detail" id="dat-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    "use strict";
+
+    var JSON_URL = 'https://playershi.com/wp-json/custom/v1/dotabyss-tier';
+    var items = {};
+    var filters = { element_type: "", party_position: "", weapon_type: "", mana_type: "", union_group: "", skill_tag: "" };
+    var filterLabels = {
+        element_type: "エレメント",
+        party_position: "ポジション",
+        weapon_type: "武器",
+        mana_type: "マナタイプ",
+        union_group: "勢力",
+        skill_tag: "スキル種別"
+    };
+    var iconKeys = {
+        element_type: "element_icon",
+        weapon_type: "weapon_icon",
+        mana_type: "mana_icon",
+        skill_tag: "skill_tag_icon"
+    };
+    var positionDefs = {
+        "1": ["front", "フロント"],
+        "2": ["back", "バック"],
+        "3": ["assist", "アシスト"]
+    };
+
+    var search = document.getElementById("dat-search");
+    var modal = document.getElementById("dat-modal");
+    var modalBody = document.getElementById("dat-modal-body");
+    var closeBtn = document.getElementById("dat-modal-close");
+    var status = document.getElementById("dat-status");
+    var tierList = document.getElementById("dat-tier-list");
+    var filterList = document.getElementById("dat-filter-list");
+    var intro = document.getElementById("dat-intro");
+
+    function esc(s) {
+        return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function field(item, key) {
+        return String((item && item[key] != null) ? item[key] : "").trim();
+    }
+
+    function toNum(v, fallback) {
+        var n = parseInt(v, 10);
+        return isNaN(n) ? fallback : n;
+    }
+
+    function normalizeItem(item) {
+        var unionType = field(item, "union_type");
+        item.union_group = unionType === "5" ? "5" : "other";
+        item.union_group_text = unionType === "5" ? "ルクスノヴァ" : "その他";
+        item.search_text = field(item, "search_text") || [
+            field(item, "ch_name"),
+            field(item, "skill_name"),
+            field(item, "skill_text"),
+            field(item, "ability1_name"),
+            field(item, "ability1_text"),
+            field(item, "ability2_name"),
+            field(item, "ability2_text"),
+            field(item, "ability3_name"),
+            field(item, "ability3_text")
+        ].join(" ");
+        return item;
+    }
+
+    function uniqueOptions(data, key, labelKey) {
+        var out = {};
+        data.forEach(function(item) {
+            var value = field(item, key);
+            if (!value) return;
+            out[value] = field(item, labelKey) || value;
+        });
+        return Object.keys(out).sort(function(a, b) {
+            var ai = /^\d+$/.test(a) ? parseInt(a, 10) : 999999;
+            var bi = /^\d+$/.test(b) ? parseInt(b, 10) : 999999;
+            return ai === bi ? String(a).localeCompare(String(b), "ja") : ai - bi;
+        }).map(function(value) {
+            return { value: value, label: out[value] };
+        });
+    }
+
+    function buildFilters(data) {
+        var options = {
+            element_type: uniqueOptions(data, "element_type", "element_type_text"),
+            party_position: uniqueOptions(data, "party_position", "party_position_text"),
+            weapon_type: uniqueOptions(data, "weapon_type", "weapon_type_text"),
+            mana_type: uniqueOptions(data, "mana_type", "mana_type_text"),
+            union_group: [
+                { value: "5", label: "ルクスノヴァ" },
+                { value: "other", label: "その他" }
+            ],
+            skill_tag: uniqueOptions(data, "skill_tag", "skill_tag_text")
+        };
+        filterList.innerHTML = Object.keys(filterLabels).map(function(key) {
+            var buttons = options[key].map(function(opt) {
+                var icon = "";
+                var iconKey = iconKeys[key];
+                if (iconKey) {
+                    var found = data.find(function(item) { return field(item, key) === opt.value; });
+                    icon = found ? field(found, iconKey) : "";
+                }
+                return '<button type="button" class="dat-filter-btn" data-filter="' + esc(key) + '" data-value="' + esc(opt.value) + '">' +
+                    (icon ? '<img class="dat-filter-icon" src="' + esc(icon) + '" alt="" loading="lazy" decoding="async">' : '') +
+                    '<span>' + esc(opt.label) + '</span></button>';
+            }).join("");
+            return '<div class="dat-filter-block" data-filter-block="' + esc(key) + '">' +
+                '<div class="dat-filter-label">' + esc(filterLabels[key]) + '</div>' +
+                '<div class="dat-filter-buttons" data-filter-group="' + esc(key) + '">' + buttons + '</div>' +
+                '</div>';
+        }).join("");
+
+        filterList.querySelectorAll(".dat-filter-btn").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                var key = btn.dataset.filter;
+                var val = btn.dataset.value;
+                filters[key] = filters[key] === val ? "" : val;
+                filterList.querySelectorAll('.dat-filter-btn[data-filter="' + key + '"]').forEach(function(b) {
+                    b.classList.toggle("is-active", filters[key] === b.dataset.value);
+                });
+                applyFilters();
+            });
+        });
+    }
+
+    function rarityClass(item) {
+        return field(item, "rarity_text").toLowerCase();
+    }
+
+    function cardHtml(item) {
+        var id = "dotabyss-tier-" + field(item, "ch_id").replace(/[^a-zA-Z0-9_-]/g, "-");
+        var searchText = field(item, "search_text").toLowerCase();
+        var rarityText = field(item, "rarity_text");
+        return '<article id="' + esc(id) + '" class="dat-card dat-rarity-' + esc(rarityClass(item)) + '" tabindex="0" data-card data-id="' + esc(field(item, "ch_id")) + '"' +
+            ' data-search="' + esc(searchText) + '"' +
+            ' data-element_type="' + esc(field(item, "element_type")) + '"' +
+            ' data-party_position="' + esc(field(item, "party_position")) + '"' +
+            ' data-weapon_type="' + esc(field(item, "weapon_type")) + '"' +
+            ' data-mana_type="' + esc(field(item, "mana_type")) + '"' +
+            ' data-union_group="' + esc(field(item, "union_group")) + '"' +
+            ' data-skill_tag="' + esc(field(item, "skill_tag")) + '">' +
+            '<div class="dat-thumb">' +
+                (field(item, "asset_url") ? '<img class="dat-main-img" src="' + esc(field(item, "asset_url")) + '" alt="' + esc(field(item, "ch_name")) + '" loading="lazy" decoding="async">' : '') +
+                '<span class="dat-badge dat-rarity" aria-label="' + esc(rarityText) + '"><span class="dat-rarity-label" data-text="' + esc(rarityText) + '">' + esc(rarityText) + '</span></span>' +
+                (field(item, "mana_icon") ? '<span class="dat-badge dat-mana"><img src="' + esc(field(item, "mana_icon")) + '" alt="' + esc(field(item, "mana_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
+                (field(item, "element_icon") ? '<span class="dat-badge dat-element"><img src="' + esc(field(item, "element_icon")) + '" alt="' + esc(field(item, "element_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
+            '</div>' +
+            '<div class="dat-name">' + esc(field(item, "ch_name")) + '</div>' +
+            '<div class="dat-meta">' +
+                (field(item, "weapon_icon") ? '<img src="' + esc(field(item, "weapon_icon")) + '" alt="" loading="lazy" decoding="async">' : '') +
+                '<span>' + esc(field(item, "party_position_text")) + '</span>' +
+            '</div>' +
+            '</article>';
+    }
+
+    function renderTiers(data) {
+        var tiers = {};
+        data.forEach(function(item) {
+            var tier = field(item, "tier") || "unset";
+            var pos = field(item, "party_position");
+            if (!tiers[tier]) tiers[tier] = { "1": [], "2": [], "3": [] };
+            if (!tiers[tier][pos]) tiers[tier][pos] = [];
+            tiers[tier][pos].push(item);
+        });
+
+        tierList.innerHTML = Object.keys(tiers).sort(function(a, b) {
+            return toNum(a, 999) - toNum(b, 999);
+        }).map(function(tier) {
+            var positions = tiers[tier];
+            var positionHtml = Object.keys(positionDefs).map(function(posKey) {
+                var def = positionDefs[posKey];
+                var cards = positions[posKey] || [];
+                return '<div class="dat-position dat-position-' + esc(def[0]) + '" data-position="' + esc(posKey) + '">' +
+                    '<div class="dat-position-title">' + esc(def[1]) + '</div>' +
+                    '<div class="dat-card-grid">' + (cards.length ? cards.map(cardHtml).join("") : '<div class="dat-empty">-</div>') + '</div>' +
+                    '</div>';
+            }).join("");
+            return '<div class="dat-tier-section" data-tier-section>' +
+                '<div class="dat-tier-title">Tier ' + esc(tier) + '</div>' +
+                '<div class="dat-stage">' + positionHtml + '</div>' +
+                '</div>';
+        }).join("");
+
+        tierList.querySelectorAll("[data-card]").forEach(function(card) {
+            card.addEventListener("click", function() { openModal(card.dataset.id); });
+            card.addEventListener("keydown", function(e) {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openModal(card.dataset.id);
+                }
+            });
+        });
+    }
+
+    function richText(text) {
+        return esc(text || "")
+            .replace(/紋章：情熱/g, '<span class="dat-mark-zeal">紋章：情熱</span>')
+            .replace(/紋章：衝撃/g, '<span class="dat-mark-impact">紋章：衝撃</span>')
+            .replace(/\n/g, "<br>");
+    }
+
+    function skillText(text) {
+        var lines = String(text || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").filter(function(line) { return line.trim() !== ""; });
+        if (lines.length <= 1) return richText(text);
+        return richText(lines[0]) + '<span class="dat-force-label">[フォースチェイン追加効果]</span>' + richText(lines.slice(1).join("\n"));
+    }
+
+    function icon(url, label) {
+        return url ? '<img src="' + esc(url) + '" alt="' + esc(label) + '" loading="lazy" decoding="async">' : "";
+    }
+
+    function chip(label, text, url) {
+        if (!text && !url) return "";
+        return '<span class="dat-chip">' + icon(url, text) + '<b>' + esc(label) + '</b>' + esc(text) + '</span>';
+    }
+
+    function stat(label, value) {
+        return '<div><b>' + esc(label) + '</b>' + esc(value || "-") + '</div>';
+    }
+
+    function pct(value) {
+        var n = parseFloat(value);
+        if (isNaN(n)) return value || "-";
+        return (n / 10).toString().replace(/\.0$/, "") + "%";
+    }
+
+    function rarityBadge(rarity, cls) {
+        var r = String(rarity || "");
+        return '<span class="dat-badge dat-rarity ' + (cls || "") + '" aria-label="' + esc(r) + '"><span class="dat-rarity-label" data-text="' + esc(r) + '">' + esc(r) + '</span></span>';
+    }
+
+    function openModal(id) {
+        var c = items[id];
+        if (!c) return;
+        var rarity = rarityBadge(c.rarity_text, "dat-detail-rarity");
+        var skillMeta = '<div class="dat-skill-meta">' +
+            (c.skill_tag_icon ? '<img src="' + esc(c.skill_tag_icon) + '" alt="' + esc(c.skill_tag_text) + '">' : '') +
+            '<span>' + esc(c.skill_tag_text || "") + '</span>' +
+            '<span class="dat-charge">チャージ <b>' + esc(c.skill_charge || "-") + '</b></span>' +
+            '</div>';
+        var skillHtml = '<div class="dat-box"><div class="dat-box-title">スキル</div><div class="dat-box-body"><div class="dat-skill-card"><div class="dat-skill-head"><div class="dat-skill-name">' + esc(c.skill_name || "") + '</div>' + skillMeta + '</div><div class="dat-skill-text">' + skillText(c.skill_text) + '</div></div></div></div>';
+        var abilityRows = ["1", "2", "3"].map(function(n) {
+            var name = c["ability" + n + "_name"];
+            var text = c["ability" + n + "_text"];
+            return name || text ? '<div class="dat-ability-card"><div class="dat-ability-head"><div class="dat-ability-name">' + esc(name) + '</div></div><div class="dat-ability-text">' + richText(text) + '</div></div>' : "";
+        }).join("");
+        var abilityHtml = abilityRows ? '<div class="dat-box dat-ability-box"><div class="dat-box-title">アビリティ強化</div><div class="dat-box-body">' + abilityRows + '</div></div>' : "";
+        var statMain = '<div class="dat-stat-main">' + stat("HP", c.hp) + stat("攻撃", c.attak) + stat("防御", c.defence) + '</div>';
+        var statGrid = '<div class="dat-stat-grid">' +
+            stat("会心率", pct(c.critical_probability)) +
+            stat("会心ダメージ", pct(c.critical_damage_ratio)) +
+            stat("連続攻撃率", pct(c.attack_continuous_probability)) +
+            stat("回避率", pct(c.avoid_probability)) +
+            stat("チェイン数", c.chain_count) +
+            stat("チェイン待機", c.chain_waists) +
+            stat("チェイン間隔", c.chain_interval) +
+            '</div>';
+        modalBody.innerHTML =
+            '<div class="dat-detail-head">' +
+                '<img class="dat-detail-img" src="' + esc(c.asset_url) + '" alt="' + esc(c.ch_name) + '">' +
+                '<div><div class="dat-detail-title-row">' + rarity + '<div class="dat-detail-name" id="dat-modal-title">' + esc(c.ch_name) + '</div></div>' +
+                '<div class="dat-chip-row">' +
+                    chip("属性", c.element_type_text, c.element_icon) +
+                    chip("配置", c.party_position_text, "") +
+                    chip("マナ", c.mana_type_text, c.mana_icon) +
+                '</div><div class="dat-chip-row">' +
+                    chip("武器", c.weapon_type_text, c.weapon_icon) +
+                    chip("防具", c.armor_type_text, "") +
+                '</div></div>' +
+            '</div>' +
+            skillHtml +
+            abilityHtml +
+            '<div class="dat-box"><div class="dat-box-title">能力</div><div class="dat-box-body" style="padding:12px">' + statMain + statGrid + '</div></div>';
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+    }
+
+    function applyFilters() {
+        var q = (search.value || "").toLowerCase();
+        document.querySelectorAll("[data-card]").forEach(function(card) {
+            var ok = true;
+            Object.keys(filters).forEach(function(key) {
+                if (filters[key] && card.dataset[key] !== filters[key]) ok = false;
+            });
+            if (q && (card.dataset.search || "").toLowerCase().indexOf(q) === -1) ok = false;
+            card.hidden = !ok;
+        });
+        document.querySelectorAll(".dat-stage").forEach(function(stage) {
+            var posFilter = filters.party_position || "";
+            stage.classList.toggle("is-position-filtered", !!posFilter);
+            stage.querySelectorAll(".dat-position").forEach(function(pos) {
+                var isTarget = !!posFilter && pos.dataset.position === posFilter;
+                pos.classList.toggle("is-filter-target", isTarget);
+                var hasVisible = !!pos.querySelector("[data-card]:not([hidden])");
+                pos.hidden = posFilter ? !isTarget : !hasVisible;
+            });
+        });
+        document.querySelectorAll("[data-tier-section]").forEach(function(section) {
+            section.hidden = !section.querySelector("[data-card]:not([hidden])");
+        });
+    }
+
+    function init(data) {
+        var rawItems = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+        rawItems = rawItems.filter(function(item) { return item && field(item, "ch_id"); }).map(normalizeItem);
+        rawItems.sort(function(a, b) {
+            return (toNum(a.tier, 999) - toNum(b.tier, 999)) ||
+                (toNum(a.party_position, 999) - toNum(b.party_position, 999)) ||
+                (toNum(b.rarity, 0) - toNum(a.rarity, 0)) ||
+                (toNum(a.ch_id, 0) - toNum(b.ch_id, 0));
+        });
+        items = {};
+        rawItems.forEach(function(item) {
+            items[field(item, "ch_id")] = item;
+        });
+        if (data && data.updated_at) {
+            intro.innerHTML += " 最終更新: " + esc(String(data.updated_at).slice(0, 10));
+        }
+        buildFilters(rawItems);
+        renderTiers(rawItems);
+        status.hidden = true;
+    }
+
+    search.addEventListener("input", applyFilters);
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeModal(); });
+
+    fetch(JSON_URL, { cache: "no-store" })
+        .then(function(response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            return response.json();
+        })
+        .then(init)
+        .catch(function(err) {
+            console.error(err);
+            status.className = "dat-error";
+            status.textContent = "Tierデータを読み込めません。JSONのURLまたはCORS設定を確認してください。";
+        });
+})();
+</script>
+</body>
+</html>
