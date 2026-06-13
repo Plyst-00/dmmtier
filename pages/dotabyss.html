@@ -639,16 +639,22 @@
     .dat-card-grid { gap: 9px 5px; }
     .dat-position-title { margin-right: 0; padding: 5px 16px 5px 2px; font-size: 12px; }
     .dat-name { min-height: 34px; font-size: 11px; }
-    .dat-meta { min-height: 25px; margin: 0 9px 6px 22px; padding: 4px 5px 5px 13px; font-size: 9px; }
-    .dat-meta::before { left: -19px; width: 30px; height: 30px; border-width: 2px; }
+    .dat-meta { min-height: 24px; margin: 0 8px 6px 20px; padding: 4px 8px 5px 18px; font-size: 11px; justify-content: center; }
+    .dat-meta::before { left: -16px; width: 28px; height: 28px; border-width: 2px; }
     .dat-meta::after { right: -8px; }
-    .dat-meta img { left: -15px; width: 23px; height: 23px; margin: auto 0; }
-    .dat-rarity { top: -8px; left: -5px; width: auto; height: auto; font-size: 18px; }
+    .dat-meta span { width: 100%; color: transparent; text-align: center; overflow: visible; }
+    .dat-meta span::after { content: attr(data-short); font-size: 12px; font-weight: 900; line-height: 1; }
+    .dat-position-front .dat-meta span::after,
+    .dat-position-back .dat-meta span::after { color: #fff; }
+    .dat-position-assist .dat-meta span::after { color: #3b2b00; }
+    .dat-meta img { left: -13px; width: 21px; height: 21px; margin: auto 0; }
+    .dat-rarity { top: -12px; left: -5px; width: auto; height: auto; font-size: 20px; transform: scaleX(.9) scaleY(1.12); }
+    .dat-rarity-label { filter: drop-shadow(.7px .7px 0 var(--rarity-outline)) drop-shadow(0 0 3px var(--rarity-glow)); }
     .dat-rarity-svg { display: none !important; }
     .dat-detail-rarity { flex-basis: 66px; width: 66px; height: 38px; }
     .dat-detail-rarity .dat-rarity-svg { width: 66px; height: 38px; }
-    .dat-mana { top: 15px; left: -5px; right: auto; }
-    .dat-mana img { width: 31px; height: 31px; }
+    .dat-mana { top: 10px; left: -5px; right: auto; }
+    .dat-mana img { width: 25px; height: 25px; }
     .dat-element { top: -6px; right: -6px; left: auto; padding: 1px; border-width: 2px; }
     .dat-element img { width: 20px; height: 20px; }
     .dat-detail-head { grid-template-columns: 82px minmax(0, 1fr); gap: 10px; }
@@ -881,6 +887,7 @@
         var id = "dotabyss-tier-" + field(item, "ch_id").replace(/[^a-zA-Z0-9_-]/g, "-");
         var searchText = field(item, "search_text").toLowerCase();
         var rarityText = field(item, "rarity_text");
+        var posShort = ({ "1": "F", "2": "B", "3": "A" })[field(item, "party_position")] || field(item, "party_position_text");
         return '<article id="' + esc(id) + '" class="dat-card dat-scroll-card dat-rarity-' + esc(rarityClass(item)) + '" tabindex="0" data-card data-id="' + esc(field(item, "ch_id")) + '"' +
             ' data-search="' + esc(searchText) + '"' +
             ' data-element_type="' + esc(field(item, "element_type")) + '"' +
@@ -898,7 +905,7 @@
             '<div class="dat-name">' + esc(field(item, "ch_name")) + '</div>' +
             '<div class="dat-meta">' +
                 (field(item, "weapon_icon") ? '<img src="' + esc(field(item, "weapon_icon")) + '" alt="" loading="lazy" decoding="async">' : '') +
-                '<span>' + esc(field(item, "party_position_text")) + '</span>' +
+                '<span data-short="' + esc(posShort) + '">' + esc(field(item, "party_position_text")) + '</span>' +
             '</div>' +
             '</article>';
     }
