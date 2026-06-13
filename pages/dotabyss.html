@@ -667,6 +667,51 @@
     text-shadow: none;
     font-weight: 900;
 }
+.dotabyss-tier .dat-scroll-card {
+    opacity: 0;
+    transform: translateY(28px) scale(.94);
+    filter: blur(2px) brightness(.82) saturate(.9);
+    transition:
+        opacity .55s cubic-bezier(.2,.8,.2,1),
+        transform .55s cubic-bezier(.2,.8,.2,1),
+        filter .55s cubic-bezier(.2,.8,.2,1),
+        box-shadow .2s ease;
+    will-change: opacity, transform, filter;
+}
+.dotabyss-tier .dat-scroll-card.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: none;
+}
+.dotabyss-tier .dat-scroll-card.is-visible:hover,
+.dotabyss-tier .dat-scroll-card.is-visible:focus-visible {
+    transform: translateY(-4px) scale(1.055);
+}
+.dotabyss-tier .dat-main-img.dat-lazy-img {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: blur(8px) brightness(.8);
+    transition:
+        opacity .5s ease,
+        transform .7s cubic-bezier(.2,.8,.2,1),
+        filter .7s cubic-bezier(.2,.8,.2,1);
+}
+.dotabyss-tier .dat-main-img.dat-lazy-img.is-loaded {
+    opacity: 1;
+    transform: scale(1);
+    filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .dotabyss-tier .dat-scroll-card,
+    .dotabyss-tier .dat-scroll-card.is-visible,
+    .dotabyss-tier .dat-main-img.dat-lazy-img,
+    .dotabyss-tier .dat-main-img.dat-lazy-img.is-loaded {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+    }
+}
 .dat-loading,
 .dat-error {
     margin: 12px 0;
@@ -836,7 +881,7 @@
         var id = "dotabyss-tier-" + field(item, "ch_id").replace(/[^a-zA-Z0-9_-]/g, "-");
         var searchText = field(item, "search_text").toLowerCase();
         var rarityText = field(item, "rarity_text");
-        return '<article id="' + esc(id) + '" class="dat-card dat-rarity-' + esc(rarityClass(item)) + '" tabindex="0" data-card data-id="' + esc(field(item, "ch_id")) + '"' +
+        return '<article id="' + esc(id) + '" class="dat-card dat-scroll-card dat-rarity-' + esc(rarityClass(item)) + '" tabindex="0" data-card data-id="' + esc(field(item, "ch_id")) + '"' +
             ' data-search="' + esc(searchText) + '"' +
             ' data-element_type="' + esc(field(item, "element_type")) + '"' +
             ' data-party_position="' + esc(field(item, "party_position")) + '"' +
@@ -845,7 +890,7 @@
             ' data-union_group="' + esc(field(item, "union_group")) + '"' +
             ' data-skill_tag="' + esc(field(item, "skill_tag")) + '">' +
             '<div class="dat-thumb">' +
-                (field(item, "asset_url") ? '<img class="dat-main-img" src="' + esc(field(item, "asset_url")) + '" alt="' + esc(field(item, "ch_name")) + '" loading="lazy" decoding="async">' : '') +
+                (field(item, "asset_url") ? '<img class="dat-main-img dat-lazy-img" data-src="' + esc(field(item, "asset_url")) + '" alt="' + esc(field(item, "ch_name")) + '" loading="lazy" decoding="async">' : '') +
                 '<span class="dat-badge dat-rarity" aria-label="' + esc(rarityText) + '"><span class="dat-rarity-label" data-text="' + esc(rarityText) + '">' + esc(rarityText) + '</span></span>' +
                 (field(item, "mana_icon") ? '<span class="dat-badge dat-mana"><img src="' + esc(field(item, "mana_icon")) + '" alt="' + esc(field(item, "mana_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
                 (field(item, "element_icon") ? '<span class="dat-badge dat-element"><img src="' + esc(field(item, "element_icon")) + '" alt="' + esc(field(item, "element_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
@@ -856,6 +901,48 @@
                 '<span>' + esc(field(item, "party_position_text")) + '</span>' +
             '</div>' +
             '</article>';
+    }
+
+    function loadCardImage(card) {
+        var img = card.querySelector(".dat-lazy-img[data-src]");
+        if (!img) return;
+        img.addEventListener("load", function() {
+            img.classList.add("is-loaded");
+        }, { once: true });
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+    }
+
+    function setupScrollReveal() {
+        var cards = Array.prototype.slice.call(tierList.querySelectorAll(".dat-scroll-card"));
+        if (!("IntersectionObserver" in window)) {
+            cards.forEach(function(card) {
+                loadCardImage(card);
+                card.classList.add("is-visible");
+            });
+            return;
+        }
+
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var card = entry.target;
+                loadCardImage(card);
+                requestAnimationFrame(function() {
+                    card.classList.add("is-visible");
+                });
+                observer.unobserve(card);
+            });
+        }, {
+            root: null,
+            rootMargin: "180px 0px",
+            threshold: .12
+        });
+
+        cards.forEach(function(card, index) {
+            card.style.transitionDelay = Math.min(index % 8, 5) * 45 + "ms";
+            observer.observe(card);
+        });
     }
 
     function renderTiers(data) {
@@ -895,6 +982,7 @@
                 }
             });
         });
+        setupScrollReveal();
     }
 
     function richText(text) {
