@@ -1132,13 +1132,7 @@
     document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeModal(); });
 
     var requestUrl = JSON_URL + (JSON_URL.indexOf("?") === -1 ? "?" : "&") + "v=" + Date.now();
-    fetch(requestUrl, {
-            cache: "no-store",
-            headers: {
-                "Cache-Control": "no-cache",
-                "Pragma": "no-cache"
-            }
-        })
+    fetch(requestUrl, { cache: "no-store" })
         .then(function(response) {
             if (!response.ok) throw new Error("HTTP " + response.status);
             return response.json();
