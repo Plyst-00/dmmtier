@@ -1273,13 +1273,8 @@
     function init(data) {
         var rawItems = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
         rawItems = rawItems.filter(function(item) { return item && field(item, "ch_id"); }).map(normalizeItem);
-        var newIds = {};
-        rawItems.slice(-3).forEach(function(item) {
-            var id = field(item, "ch_id");
-            if (id) newIds[id] = true;
-        });
         rawItems.forEach(function(item) {
-            item.is_new = (field(item, "is_new") === "1" || newIds[field(item, "ch_id")]) ? "1" : "";
+            item.is_new = field(item, "is_new") === "1" ? "1" : "";
         });
         rawItems.sort(function(a, b) {
             return (toNum(a.tier, 999) - toNum(b.tier, 999)) ||
