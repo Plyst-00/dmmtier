@@ -384,6 +384,24 @@
     height: 26px;
     display: block;
 }
+.dat-new {
+    right: -5px;
+    bottom: 5px;
+    min-width: 34px;
+    min-height: 18px;
+    padding: 2px 6px 3px;
+    border: 1px solid #fff;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #ff6b6b 0%, #d80022 100%);
+    color: #fff;
+    font-family: "Arial Black", "M PLUS Rounded 1c", sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: 0 1px 0 rgba(0,0,0,.65);
+    box-shadow: 0 2px 4px rgba(0,0,0,.45), 0 0 6px rgba(255,0,42,.45);
+}
 .dat-name {
     min-height: 36px;
     padding: 7px 4px 3px;
@@ -923,8 +941,9 @@
 
     function normalizeItem(item) {
         var unionType = field(item, "union_type");
-        item.union_group = unionType === "5" ? "5" : "other";
-        item.union_group_text = unionType === "5" ? "ルクスノヴァ" : "その他";
+        var unionLabels = { "5": "ルクスノヴァ", "1": "ミレスガルド", "3": "エルドラーナ", "4": "千国連合", "2": "ペルディオン" };
+        item.union_group = unionType;
+        item.union_group_text = unionLabels[unionType] || field(item, "union_type_text");
         item.search_text = field(item, "search_text") || [
             field(item, "ch_name"),
             field(item, "skill_name"),
@@ -968,7 +987,10 @@
             mana_type: uniqueOptions(data, "mana_type", "mana_type_text"),
             union_group: [
                 { value: "5", label: "ルクスノヴァ" },
-                { value: "other", label: "その他" }
+                { value: "1", label: "ミレ" },
+                { value: "3", label: "エル" },
+                { value: "4", label: "千国" },
+                { value: "2", label: "ペル" }
             ],
             skill_tag: uniqueOptions(data, "skill_tag", "skill_tag_text")
         };
@@ -1025,6 +1047,7 @@
                 '<span class="dat-badge dat-rarity" aria-label="' + esc(rarityText) + '"><span class="dat-rarity-label" data-text="' + esc(rarityText) + '">' + esc(rarityText) + '</span></span>' +
                 (field(item, "mana_icon") ? '<span class="dat-badge dat-mana"><img src="' + esc(field(item, "mana_icon")) + '" alt="' + esc(field(item, "mana_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
                 (field(item, "element_icon") ? '<span class="dat-badge dat-element"><img src="' + esc(field(item, "element_icon")) + '" alt="' + esc(field(item, "element_type_text")) + '" loading="lazy" decoding="async"></span>' : '') +
+                (field(item, "is_new") === "1" ? '<span class="dat-badge dat-new">new</span>' : '') +
             '</div>' +
             '<div class="dat-name">' + esc(field(item, "ch_name")) + '</div>' +
             '<div class="dat-meta">' +
@@ -1203,6 +1226,7 @@
                     chip("属性", c.element_type_text, c.element_icon) +
                     chip("配置", c.party_position_text, "") +
                     chip("マナ", c.mana_type_text, c.mana_icon) +
+                    chip("勢力", c.union_group_text || c.union_type_text, "") +
                 '</div><div class="dat-chip-row">' +
                     chip("武器", c.weapon_type_text, c.weapon_icon) +
                     chip("防具", c.armor_type_text, "") +
@@ -1249,6 +1273,14 @@
     function init(data) {
         var rawItems = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
         rawItems = rawItems.filter(function(item) { return item && field(item, "ch_id"); }).map(normalizeItem);
+        var newIds = {};
+        rawItems.slice(-3).forEach(function(item) {
+            var id = field(item, "ch_id");
+            if (id) newIds[id] = true;
+        });
+        rawItems.forEach(function(item) {
+            item.is_new = (field(item, "is_new") === "1" || newIds[field(item, "ch_id")]) ? "1" : "";
+        });
         rawItems.sort(function(a, b) {
             return (toNum(a.tier, 999) - toNum(b.tier, 999)) ||
                 (toNum(a.party_position, 999) - toNum(b.party_position, 999)) ||
